@@ -93,7 +93,6 @@ console.log(nombresMayuscula);
 
 const resumenProductos = productos.map(producto => `${producto.nombre} cuesta ${producto.precio}`)
 console.log(resumenProductos);
-*/
 
 // Reto 6
 const disponibles = productos.filter(producto => producto.stock > 0);
@@ -113,3 +112,29 @@ console.log(precio2)
 console.log(categoria)
 console.log(producto5)
 console.log(buscarProducto(1))
+*/
+
+// Reto 7
+
+// ¿Existe algún producto agotado?
+const hayAgotados = productos.some(producto => producto.stock === 0);
+console.log(hayAgotados);
+
+// ¿Existe algún producto con precio mayor a $1.000.000?
+const productoPrecioMayor = productos.every(producto => producto.precio > 1000000);
+console.log(productoPrecioMayor);
+
+// ¿Todos los productos tienen precio mayor que cero?
+const preciosValidos = productos.every(producto => producto.precio > 0);
+console.log(preciosValidos);
+
+// ¿Todos los productos tienen stock mayor o igual que cero?
+const stockMayor = productos.some(producto => producto.stock >= 0)
+console.log(stockMayor);
+
+// Calcular el valor total del inventario.
+const valorInventario = productos.reduce(
+(total, producto) => total + producto.precio * producto.stock,
+0
+);
+console.log(valorInventario);
