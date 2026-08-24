@@ -1,4 +1,4 @@
-console.log("JavaScript listo para practicar");
+/*console.log("JavaScript listo para practicar");
 
 function calcularTotal(precio, cantidad) {
 const total = precio * cantidad;
@@ -59,6 +59,7 @@ const nombreCompleto = (nombre, apellido) => `${nombre} ${apellido}`;
 console.log(cuadrado(5));
 console.log(esMayorEdad(20));
 console.log(nombreCompleto("Mariana", "Pérez"));
+*/
 
 // Reto 3:
 const productos = [
@@ -74,6 +75,7 @@ const productos = [
 { id: 10, nombre: 'Power Bank', precio: 90000, categoria: 'Accesorios', stock: 7 }
 ];
 
+/*
 //Reto 4
 productos.forEach((producto, indice) => {
 console.log(`${indice + 1}. ${producto.nombre} - ${producto.precio} - stock:${producto.stock}`);
@@ -91,3 +93,23 @@ console.log(nombresMayuscula);
 
 const resumenProductos = productos.map(producto => `${producto.nombre} cuesta ${producto.precio}`)
 console.log(resumenProductos);
+*/
+
+// Reto 6
+const disponibles = productos.filter(producto => producto.stock > 0);
+const producto3 = productos.find(producto => producto.id === 3);
+
+const precio1 = productos.filter(producto => producto.precio > 100000);
+const precio2 = productos.filter(producto => producto.precio > 50000 <200000);
+const categoria = productos.filter(producto => producto.categoria = `Accesorios`);
+const producto5 = productos.find(producto => producto.id === 5);
+
+function buscarProducto (id){
+const producto = productos.find(producto => producto.id === id);
+    return producto
+}
+console.log(precio1)
+console.log(precio2)
+console.log(categoria)
+console.log(producto5)
+console.log(buscarProducto(1))
