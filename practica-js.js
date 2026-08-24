@@ -112,7 +112,6 @@ console.log(precio2)
 console.log(categoria)
 console.log(producto5)
 console.log(buscarProducto(1))
-*/
 
 // Reto 7
 
@@ -138,3 +137,19 @@ const valorInventario = productos.reduce(
 0
 );
 console.log(valorInventario);
+*/
+
+// Reto 8
+
+// const { nombre, precio, stock } = productos[0];
+// console.log(nombre, precio, stock);
+
+const productoActualizado = {
+    ...productos[0],
+    precio: 3000,
+    stock: 0
+};
+const estado = productoActualizado.stock > 0 ? 'Disponible' : 'Agotado';
+console.log(estado);
+console.log(`El producto ${productos[0].nombre} cuesta $${productos[0].precio}`);
+
