@@ -45,3 +45,17 @@ console.log(calcularPromedio(5, 5, 5))
 // mientras que return devuelve un valor deede una funciona o 
 // permite guardar un resultado en una variable o utilizarlo
 // después.
+
+// Reto 2:
+const aplicarIva = precio => precio * 1.19;
+console.log(aplicarIva(2000))
+
+const cuadrado = numero => numero * numero;
+
+const esMayorEdad = edad => edad >= 18;
+
+const nombreCompleto = (nombre, apellido) => `${nombre} ${apellido}`;
+
+console.log(cuadrado(5));
+console.log(esMayorEdad(20));
+console.log(nombreCompleto("Mariana", "Pérez"));
