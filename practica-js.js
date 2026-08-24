@@ -73,3 +73,8 @@ const productos = [
 { id: 9, nombre: 'Consola', precio: 2000000, categoria: 'Entretenimiento', stock: 8 },
 { id: 10, nombre: 'Power Bank', precio: 90000, categoria: 'Accesorios', stock: 7 }
 ];
+
+//Reto 4
+productos.forEach((producto, indice) => {
+console.log(`${indice + 1}. ${producto.nombre} - ${producto.precio} - stock:${producto.stock}`);
+});
