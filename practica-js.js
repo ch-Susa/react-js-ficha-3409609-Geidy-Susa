@@ -1,3 +1,9 @@
+import { productos } from './data/productos';
+
+export function buscarProducto(id) {
+  return productos.find(producto => producto.id === id);
+}
+
 console.log("JavaScript listo para practicar");
 
 function calcularTotal(precio, cantidad) {

@@ -1,17 +1,123 @@
 .contenedor {
-max-width: 1100px;
-margin: 0 auto;
-padding: 24px;
-font-family: Arial, sans-serif;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  font-family: Arial, sans-serif;
+  background: #f4f7fb;
+  min-height: 100vh;
+  color: #1f2937;
 }
+
+.contenedor h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2563eb;
+  font-size: 36px;
+}
+
+.contenedor > p {
+  background: white;
+  padding: 14px 18px;
+  margin: 10px 0;
+  border-radius: 10px;
+  border-left: 5px solid #2563eb;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  font-size: 17px;
+}
+
+.contenedor section {
+  margin-top: 35px;
+}
+
+.contenedor section h2 {
+  color: #1e40af;
+  margin-bottom: 18px;
+  font-size: 25px;
+}
+
 .productos {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
 }
+
 .producto-card {
-border: 1px solid #ddd;
-border-radius: 10px;
-padding: 16px;
-background: white;
+  border: none;
+  border-radius: 14px;
+  padding: 20px;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.producto-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+}
+
+.producto-card h2 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #111827;
+  font-size: 21px;
+}
+
+.producto-card p {
+  margin: 9px 0;
+  color: #4b5563;
+}
+
+.producto-card strong {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 7px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+
+.producto-card .disponible {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.producto-card .agotado {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+@media (max-width: 600px) {
+  .contenedor {
+    padding: 25px 15px;
+  }
+
+  .contenedor h1 {
+    font-size: 28px;
+  }
+
+  .productos {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filtro-categoria {
+  width: 100%;
+  max-width: 350px;
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border: 2px solid #2563eb;
+  border-radius: 10px;
+  background: white;
+  color: #1f2937;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+  transition: 0.2s ease;
+}
+
+.filtro-categoria:hover {
+  border-color: #1e40af;
+}
+
+.filtro-categoria:focus {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
