@@ -1,4 +1,4 @@
-/*console.log("JavaScript listo para practicar");
+console.log("JavaScript listo para practicar");
 
 function calcularTotal(precio, cantidad) {
 const total = precio * cantidad;
@@ -59,7 +59,6 @@ const nombreCompleto = (nombre, apellido) => `${nombre} ${apellido}`;
 console.log(cuadrado(5));
 console.log(esMayorEdad(20));
 console.log(nombreCompleto("Mariana", "Pérez"));
-*/
 
 // Reto 3:
 const productos = [
@@ -75,7 +74,6 @@ const productos = [
 { id: 10, nombre: 'Power Bank', precio: 90000, categoria: 'Accesorios', stock: 7 }
 ];
 
-/*
 //Reto 4
 productos.forEach((producto, indice) => {
 console.log(`${indice + 1}. ${producto.nombre} - ${producto.precio} - stock:${producto.stock}`);
@@ -137,10 +135,9 @@ const valorInventario = productos.reduce(
 0
 );
 console.log(valorInventario);
-*/
+
 
 // Reto 8
-
 // const { nombre, precio, stock } = productos[0];
 // console.log(nombre, precio, stock);
 
