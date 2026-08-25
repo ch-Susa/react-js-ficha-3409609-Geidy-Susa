@@ -1,40 +1,46 @@
 function ProductoCard({ producto }) {
-  const {
-    nombre,
-    precio,
-    categoria,
-    stock
-  } = producto;
 
-  const estado =
-    stock > 0
-      ? "Disponible"
-      : "Agotado";
-
-  const mostrarProducto = () => {
-    alert(`Seleccionaste ${nombre}`);
+  const formatearPrecio = precio => {
+    return precio.toLocaleString("es-CO");
   };
 
   return (
     <article className="producto-card">
-      <h2>{nombre}</h2>
 
-      <p>Categoría: {categoria}</p>
+      <h2>{producto.nombre}</h2>
 
-      <p>Precio: ${precio}</p>
+      <p>
+        Precio original:{" "}
+        <s>${formatearPrecio(producto.precio)}</s>
+      </p>
 
-      <p>Stock: {stock}</p>
+      <p className="precio-descuento">
+        Precio con descuento: $
+        {formatearPrecio(producto.precioFinal)}
+      </p>
 
-      <strong>{estado}</strong>
+      <p className="descuento">
+        Descuento: {producto.descuento}%
+      </p>
 
-      <br />
+      <p>
+        Stock: {producto.stock}
+      </p>
 
-      <button
-        onClick={mostrarProducto}
-        disabled={stock === 0}
-      >
-        {stock > 0 ? "Ver producto" : "Agotado"}
-      </button>
+      <p>
+        Categoría: {producto.categoria}
+      </p>
+
+      {producto.stock > 0 ? (
+        <p className="disponible">
+          Disponible
+        </p>
+      ) : (
+        <p className="agotado">
+          Agotado
+        </p>
+      )}
+
     </article>
   );
 }
