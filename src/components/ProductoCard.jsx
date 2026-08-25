@@ -1,15 +1,40 @@
 function ProductoCard({ producto }) {
-  const estado = producto.stock > 0 ? 'Disponible' : 'Agotado';
+  const {
+    nombre,
+    precio,
+    categoria,
+    stock
+  } = producto;
+
+  const estado =
+    stock > 0
+      ? "Disponible"
+      : "Agotado";
+
+  const mostrarProducto = () => {
+    alert(`Seleccionaste ${nombre}`);
+  };
 
   return (
     <article className="producto-card">
-      <h2>{producto.nombre}</h2>
-      <p>Categoría: {producto.categoria}</p>
-      <p>Precio: ${producto.precio}</p>
-      <p>Stock: {producto.stock}</p>
-      <strong className={producto.stock > 0 ? 'disponible' : 'agotado'}>
-        {estado}
-      </strong>
+      <h2>{nombre}</h2>
+
+      <p>Categoría: {categoria}</p>
+
+      <p>Precio: ${precio}</p>
+
+      <p>Stock: {stock}</p>
+
+      <strong>{estado}</strong>
+
+      <br />
+
+      <button
+        onClick={mostrarProducto}
+        disabled={stock === 0}
+      >
+        {stock > 0 ? "Ver producto" : "Agotado"}
+      </button>
     </article>
   );
 }
