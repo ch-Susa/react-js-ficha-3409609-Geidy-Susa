@@ -1,5 +1,4 @@
 import ProductoCard from './components/ProductoCard';
-import { productos } from './data/productos';
 import './App.css';
 import { useState } from "react";
 import { productos as productosIniciales } from "./data/productos";
@@ -11,6 +10,12 @@ function App() {
     ...productos,
     nuevoProducto
     ]);
+  };
+  const eliminarProducto = (id) => {
+  const nuevaLista = productos.filter(
+  producto => producto.id !== id
+    );
+  setProductos(nuevaLista);
   };
   const [busqueda, setBusqueda] = useState("");
   const [soloDisponibles, setSoloDisponibles] = useState(false);
@@ -29,15 +34,15 @@ function App() {
     producto => producto.stock > 0
   );
 
-  const valorInventario = productosConDescuento.reduce(
-    (total, producto) =>
-      total + producto.precioFinal * producto.stock,
-    0
-  );
+  const productosAgotados = productos.filter(
+  producto => producto.stock === 0
+);
 
-  const hayAgotados = productosConDescuento.some(
-    producto => producto.stock === 0
-  );
+const valorInventario = productos.reduce(
+  (total, producto) =>
+    total + producto.precio * producto.stock,
+  0
+);
 
   const productosFiltrados = productosConDescuento.filter(producto => {
 
@@ -60,7 +65,25 @@ function App() {
       coincideStock
     );
   });
+    const modificarStock = (id, cambio) => {
+const nuevosProductos =
+productos.map(producto => {
+if (producto.id === id) {
+return {
+...producto,
+stock: Math.max(
 
+0,
+
+producto.stock + cambio
+
+)
+};
+}
+return producto;
+});
+setProductos(nuevosProductos);
+};
   
   const limpiarFiltros = () => {
     setBusqueda("");
@@ -123,18 +146,18 @@ function App() {
 
       <br /><br />
 
-      <p>Productos disponibles: {disponibles.length}</p>
+      <p>
+        Productos registrados: {productos.length}
+      </p>
 
       <p>
-        Valor del inventario: $
+        Productos agotados: {productosAgotados.length}
+      </p>
+
+      <p>
+        Valor total del inventario: $
         {valorInventario.toLocaleString("es-CO")}
       </p>
-
-      <p>
-        ¿Hay productos agotados?{" "}
-        {hayAgotados ? "Sí" : "No"}
-      </p>
-
       <p>
         Productos encontrados: {productosFiltrados.length}
       </p>
@@ -157,7 +180,9 @@ function App() {
           <ProductoCard
             key={producto.id}
             producto={producto}
-          />
+            onEliminar={eliminarProducto}
+            modificarStock={modificarStock}
+         />
         ))}
 
         {productosFiltrados.length === 0 && (
@@ -171,10 +196,12 @@ function App() {
         <h2>Productos disponibles</h2>
 
         {disponibles.map(producto => (
-          <ProductoCard
-            key={producto.id}
-            producto={producto}
-          />
+         <ProductoCard
+           key={producto.id}
+           producto={producto}
+           onEliminar={eliminarProducto}
+           modificarStock={modificarStock}
+        />
         ))}
 
       </section>

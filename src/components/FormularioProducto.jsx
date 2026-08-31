@@ -47,21 +47,21 @@ onChange={manejarCambio}
 type="text"
 name="categoria"
 placeholder="Categoría"
-value={formulario.nombre}
+value={formulario.categoria}
 onChange={manejarCambio}
 />
 <input
 type="number"
 name="precio"
 placeholder="Precio"
-value={formulario.nombre}
+value={formulario.precio}
 onChange={manejarCambio}
 />
 <input
 type="number"
 name="stock"
 placeholder="Stock"
-value={formulario.nombre}
+value={formulario.stock}
 onChange={manejarCambio}
 />
 <button type="submit">
