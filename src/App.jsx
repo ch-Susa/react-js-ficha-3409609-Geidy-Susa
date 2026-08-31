@@ -6,7 +6,12 @@ import { productos as productosIniciales } from "./data/productos";
 import FormularioProducto
 from "./components/FormularioProducto";
 function App() {
-
+  const agregarProducto = (nuevoProducto) => {
+  setProductos([
+    ...productos,
+    nuevoProducto
+    ]);
+  };
   const [busqueda, setBusqueda] = useState("");
   const [soloDisponibles, setSoloDisponibles] = useState(false);
   const [categoria, setCategoria] = useState("Todas");
@@ -80,7 +85,9 @@ function App() {
       />
 
 
-<FormularioProducto />
+      <FormularioProducto
+        onAgregar={agregarProducto}
+      />
       <br /><br />
 
       <select
