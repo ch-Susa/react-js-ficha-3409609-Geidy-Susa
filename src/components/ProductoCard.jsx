@@ -1,67 +1,89 @@
-
 function ProductoCard({
   producto,
   onEliminar,
   modificarStock
 }) {
 
-  const formatearPrecio = precio => {
-    return precio.toLocaleString("es-CO");
-  };
   return (
     <article className="producto-card">
 
       <h2>{producto.nombre}</h2>
 
       <p>
+        <strong>Categoría:</strong>{" "}
+        {producto.categoria}
+      </p>
+
+      <p>
         Precio original:{" "}
-        <s>${formatearPrecio(producto.precio)}</s>
+        <s>
+          ${producto.precio.toLocaleString("es-CO")}
+        </s>
       </p>
 
       <p className="precio-descuento">
         Precio con descuento: $
-        {formatearPrecio(producto.precioFinal)}
+        {producto.precioFinal.toLocaleString("es-CO")}
       </p>
 
-      <p className="descuento">
-        Descuento: {producto.descuento}%
-      </p>
+      <span className="descuento">
+        {producto.descuento}% de descuento
+      </span>
 
-      <p>
-  <button onClick={() => modificarStock(producto.id, -1)}>
-    -
-  </button>
+      <div className="stock">
 
-  Stock: {producto.stock}
+        <p>
+          <strong>Stock:</strong>{" "}
+          {producto.stock} unidades
+        </p>
 
-  <button onClick={() => modificarStock(producto.id, 1)}>
-    +
-  </button>
-</p>
+        <div className="stock-controles">
 
-      <p>
-        Categoría: {producto.categoria}
-      </p>
+          <button
+            className="btn-stock btn-menos"
+            onClick={() =>
+              modificarStock(producto.id, -1)
+            }
+            disabled={producto.stock === 0}
+          >
+            −
+          </button>
+
+          <span className="stock-numero">
+            {producto.stock}
+          </span>
+
+          <button
+            className="btn-stock btn-mas"
+            onClick={() =>
+              modificarStock(producto.id, 1)
+            }
+          >
+            +
+          </button>
+
+        </div>
+
+      </div>
 
       {producto.stock > 0 ? (
-        <p className="disponible">
-          Disponible
-        </p>
+        <span className="disponible">
+          ✓ Disponible
+        </span>
       ) : (
-        <p className="agotado">
-          Agotado
-        </p>
+        <span className="agotado">
+          ✕ Agotado
+        </span>
       )}
+
       <button
-    onClick={() => onEliminar(producto.id)}
-    >
-      Eliminar
-    </button>
+        className="btn-eliminar"
+        onClick={() => onEliminar(producto.id)}
+      >
+        🗑 Eliminar producto
+      </button>
     </article>
   );
 }
-// ¿Por qué usamos filter() y no find()?
-//  Porque filter() devuelve un nuevo arreglo con todos los elementos que cumplen una
-//  condición en cambio, find() devuelve solamente el primer elemento que cumple la condición,
-//  por lo que no sirve para construir directamente la lista sin el elemento eliminado.
+
 export default ProductoCard;
