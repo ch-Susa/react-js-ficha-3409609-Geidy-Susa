@@ -2,14 +2,18 @@ import ProductoCard from './components/ProductoCard';
 import { productos } from './data/productos';
 import './App.css';
 import { useState } from "react";
-
+import { productos as productosIniciales } from "./data/productos";
+import FormularioProducto
+from "./components/FormularioProducto";
 function App() {
 
   const [busqueda, setBusqueda] = useState("");
   const [soloDisponibles, setSoloDisponibles] = useState(false);
   const [categoria, setCategoria] = useState("Todas");
+  
+  const [productos, setProductos] =
+    useState(productosIniciales);
 
-  // Descuento utilizando map()
   const productosConDescuento = productos.map(producto => ({
     ...producto,
     descuento: 10,
@@ -52,7 +56,7 @@ function App() {
     );
   });
 
-  // Limpiar filtros
+  
   const limpiarFiltros = () => {
     setBusqueda("");
     setCategoria("Todas");
@@ -75,6 +79,8 @@ function App() {
         }}
       />
 
+
+<FormularioProducto />
       <br /><br />
 
       <select
