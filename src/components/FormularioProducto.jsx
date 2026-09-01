@@ -1,6 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-function FormularioProducto({ onAgregar }) {
+function FormularioProducto({
+  onAgregar,
+  productoEditando,
+  onActualizar,
+  onMensaje
+}) {
+
   const [formulario, setFormulario] = useState({
     nombre: "",
     categoria: "",
@@ -9,13 +15,31 @@ function FormularioProducto({ onAgregar }) {
   });
 
   const manejarCambio = (evento) => {
+
     setFormulario({
       ...formulario,
       [evento.target.name]: evento.target.value
     });
+
   };
 
+  useEffect(() => {
+
+    if (productoEditando) {
+
+      setFormulario({
+        nombre: productoEditando.nombre,
+        categoria: productoEditando.categoria,
+        precio: productoEditando.precio,
+        stock: productoEditando.stock
+      });
+
+    }
+
+  }, [productoEditando]);
+
   const manejarEnvio = (evento) => {
+
     evento.preventDefault();
 
     if (
@@ -24,19 +48,37 @@ function FormularioProducto({ onAgregar }) {
       Number(formulario.precio) <= 0 ||
       Number(formulario.stock) < 0
     ) {
-      alert("Revisa los datos del producto");
+
+      onMensaje("Revisa los datos del producto.");
+
       return;
     }
 
-    const nuevoProducto = {
-      id: Date.now(),
-      nombre: formulario.nombre,
-      categoria: formulario.categoria,
-      precio: Number(formulario.precio),
-      stock: Number(formulario.stock)
-    };
+    if (productoEditando) {
 
-    onAgregar(nuevoProducto);
+      const productoActualizado = {
+        ...productoEditando,
+        nombre: formulario.nombre,
+        categoria: formulario.categoria,
+        precio: Number(formulario.precio),
+        stock: Number(formulario.stock)
+      };
+
+      onActualizar(productoActualizado);
+
+    } else {
+
+      const nuevoProducto = {
+        id: Date.now(),
+        nombre: formulario.nombre,
+        categoria: formulario.categoria,
+        precio: Number(formulario.precio),
+        stock: Number(formulario.stock)
+      };
+
+      onAgregar(nuevoProducto);
+
+    }
 
     setFormulario({
       nombre: "",
@@ -44,6 +86,7 @@ function FormularioProducto({ onAgregar }) {
       precio: "",
       stock: ""
     });
+
   };
 
   return (
@@ -51,7 +94,12 @@ function FormularioProducto({ onAgregar }) {
       className="formulario-producto"
       onSubmit={manejarEnvio}
     >
-      <h2>Agregar producto</h2>
+
+      <h2>
+        {productoEditando
+          ? "Editar producto"
+          : "Agregar producto"}
+      </h2>
 
       <input
         type="text"
@@ -86,8 +134,13 @@ function FormularioProducto({ onAgregar }) {
       />
 
       <button type="submit">
-        Agregar producto
+
+        {productoEditando
+          ? "Guardar cambios"
+          : "Agregar producto"}
+
       </button>
+
     </form>
   );
 }

@@ -18,8 +18,11 @@ function App() {
 
   const [productos, setProductos] = useState(obtenerProductosIniciales);
   const [busqueda, setBusqueda] = useState("");
-  const [soloDisponibles, setSoloDisponibles] = useState(false);
   const [categoria, setCategoria] = useState("Todas");
+  const [estadoStock, setEstadoStock] = useState("Todos");
+  const [orden, setOrden] = useState("nombre");
+  const [productoEditando, setProductoEditando] = useState(null);
+  const [mensaje, setMensaje] = useState("");
 
   useEffect(() => {
     localStorage.setItem(
@@ -29,37 +32,79 @@ function App() {
   }, [productos]);
 
   const agregarProducto = (nuevoProducto) => {
-    setProductos([
-      ...productos,
+    setProductos(prevProductos => [
+      ...prevProductos,
       nuevoProducto
     ]);
+
+    setMensaje("Producto agregado correctamente.");
   };
 
   const eliminarProducto = (id) => {
-    const nuevaLista = productos.filter(
-      producto => producto.id !== id
+    const confirmar = window.confirm(
+      "¿Estás segura de que quieres eliminar este producto?"
     );
 
-    setProductos(nuevaLista);
+    if (!confirmar) {
+      return;
+    }
+
+    setProductos(prevProductos =>
+      prevProductos.filter(producto => producto.id !== id)
+    );
+
+    setMensaje("Producto eliminado.");
+  };
+
+  const editarProducto = (producto) => {
+    const productoOriginal = productos.find(
+      item => item.id === producto.id
+    );
+
+    setProductoEditando(productoOriginal);
+  };
+
+  const actualizarProducto = (productoActualizado) => {
+    setProductos(prevProductos =>
+      prevProductos.map(producto =>
+        producto.id === productoActualizado.id
+          ? productoActualizado
+          : producto
+      )
+    );
+
+    setProductoEditando(null);
+    setMensaje("Producto actualizado correctamente.");
   };
 
   const modificarStock = (id, cambio) => {
-    const nuevosProductos = productos.map(producto => {
+    setProductos(prevProductos =>
+      prevProductos.map(producto => {
 
-      if (producto.id === id) {
-        return {
-          ...producto,
-          stock: Math.max(
-            0,
-            producto.stock + cambio
-          )
-        };
-      }
+        if (producto.id === id) {
+          return {
+            ...producto,
+            stock: Math.max(
+              0,
+              producto.stock + cambio
+            )
+          };
+        }
 
-      return producto;
-    });
+        return producto;
+      })
+    );
 
-    setProductos(nuevosProductos);
+    setMensaje("Stock actualizado correctamente.");
+  };
+
+  const limpiarFiltros = () => {
+    setBusqueda("");
+    setCategoria("Todas");
+    setEstadoStock("Todos");
+    setOrden("nombre");
+
+    setMensaje("Filtros limpiados.");
   };
 
   const productosConDescuento = productos.map(producto => ({
@@ -67,6 +112,55 @@ function App() {
     descuento: 10,
     precioFinal: producto.precio * 0.90
   }));
+
+  const productosFiltrados = productosConDescuento.filter(producto => {
+
+    const coincideNombre =
+      producto.nombre
+        .toLowerCase()
+        .includes(busqueda.toLowerCase());
+
+    const coincideCategoria =
+      categoria === "Todas" ||
+      producto.categoria === categoria;
+
+    const coincideStock =
+      estadoStock === "Todos" ||
+      (estadoStock === "Disponibles" && producto.stock > 0) ||
+      (estadoStock === "Agotados" && producto.stock === 0);
+
+    return (
+      coincideNombre &&
+      coincideCategoria &&
+      coincideStock
+    );
+  });
+
+  const productosOrdenados = [...productosFiltrados].sort(
+    (a, b) => {
+
+      switch (orden) {
+
+        case "nombre":
+          return a.nombre.localeCompare(b.nombre);
+
+        case "precioMenor":
+          return a.precio - b.precio;
+
+        case "precioMayor":
+          return b.precio - a.precio;
+
+        case "stockMenor":
+          return a.stock - b.stock;
+
+        case "stockMayor":
+          return b.stock - a.stock;
+
+        default:
+          return 0;
+      }
+    }
+  );
 
   const disponibles = productosConDescuento.filter(
     producto => producto.stock > 0
@@ -82,58 +176,39 @@ function App() {
     0
   );
 
-  const productosFiltrados = productosConDescuento.filter(
-    producto => {
-
-      const coincideNombre =
-        producto.nombre
-          .toLowerCase()
-          .includes(busqueda.toLowerCase());
-
-      const coincideCategoria =
-        categoria === "Todas" ||
-        producto.categoria === categoria;
-
-      const coincideStock =
-        !soloDisponibles ||
-        producto.stock > 0;
-
-      return (
-        coincideNombre &&
-        coincideCategoria &&
-        coincideStock
-      );
-    }
-  );
-
-  const limpiarFiltros = () => {
-    setBusqueda("");
-    setCategoria("Todas");
-    setSoloDisponibles(false);
-  };
-
   return (
     <main className="contenedor">
 
       <h1>Tienda tecnológica</h1>
 
+      {mensaje && (
+        <p className="mensaje">
+          {mensaje}
+        </p>
+      )}
+
       <section className="panel-control">
 
         <div className="buscador">
+
           <label>Buscar producto</label>
 
           <input
             type="text"
             placeholder="Buscar producto..."
             value={busqueda}
-            onChange={(evento) => {
-              setBusqueda(evento.target.value);
-            }}
+            onChange={(evento) =>
+              setBusqueda(evento.target.value)
+            }
           />
+
         </div>
 
         <FormularioProducto
           onAgregar={agregarProducto}
+          productoEditando={productoEditando}
+          onActualizar={actualizarProducto}
+          onMensaje={setMensaje}
         />
 
         <div className="filtros">
@@ -144,17 +219,93 @@ function App() {
               setCategoria(evento.target.value)
             }
           >
-            <option value="Todas">Todas</option>
-            <option value="Accesorios">Accesorios</option>
-            <option value="Almacenamiento">Almacenamiento</option>
-            <option value="Audio">Audio</option>
-            <option value="Oficina">Oficina</option>
-            <option value="Pantallas">Pantallas</option>
-            <option value="Perifericos">Periféricos</option>
-            <option value="Componentes">Componentes</option>
+
+            <option value="Todas">
+              Todas las categorías
+            </option>
+
+            <option value="Accesorios">
+              Accesorios
+            </option>
+
+            <option value="Almacenamiento">
+              Almacenamiento
+            </option>
+
+            <option value="Audio">
+              Audio
+            </option>
+
+            <option value="Oficina">
+              Oficina
+            </option>
+
+            <option value="Pantallas">
+              Pantallas
+            </option>
+
+            <option value="Perifericos">
+              Periféricos
+            </option>
+
+            <option value="Componentes">
+              Componentes
+            </option>
+
             <option value="Fabricación aditiva">
               Fabricación aditiva
             </option>
+
+          </select>
+
+          <select
+            value={estadoStock}
+            onChange={(evento) =>
+              setEstadoStock(evento.target.value)
+            }
+          >
+
+            <option value="Todos">
+              Todos
+            </option>
+
+            <option value="Disponibles">
+              Disponibles
+            </option>
+
+            <option value="Agotados">
+              Agotados
+            </option>
+
+          </select>
+
+          <select
+            value={orden}
+            onChange={(evento) =>
+              setOrden(evento.target.value)
+            }
+          >
+
+            <option value="nombre">
+              Nombre A-Z
+            </option>
+
+            <option value="precioMenor">
+              Precio menor a mayor
+            </option>
+
+            <option value="precioMayor">
+              Precio mayor a menor
+            </option>
+
+            <option value="stockMenor">
+              Stock menor a mayor
+            </option>
+
+            <option value="stockMayor">
+              Stock mayor a menor
+            </option>
+
           </select>
 
           <button
@@ -171,24 +322,29 @@ function App() {
       <section className="estadisticas">
 
         <div className="estadistica">
+
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos registrados</span>
             <strong>{productos.length}</strong>
           </div>
+
         </div>
 
         <div className="estadistica">
+
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos agotados</span>
             <strong>{productosAgotados.length}</strong>
           </div>
+
         </div>
 
         <div className="estadistica">
+
           <span className="estadistica-icono"></span>
 
           <div>
@@ -197,33 +353,23 @@ function App() {
             <strong>
               ${valorInventario.toLocaleString("es-CO")}
             </strong>
+
           </div>
+
         </div>
 
         <div className="estadistica">
+
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos encontrados</span>
-            <strong>{productosFiltrados.length}</strong>
+            <strong>{productosOrdenados.length}</strong>
           </div>
+
         </div>
 
       </section>
-
-      <label className="checkbox-disponibles">
-
-        <input
-          type="checkbox"
-          checked={soloDisponibles}
-          onChange={(evento) =>
-            setSoloDisponibles(evento.target.checked)
-          }
-        />
-
-        Mostrar únicamente disponibles
-
-      </label>
 
       <section className="seccion-productos">
 
@@ -231,19 +377,24 @@ function App() {
 
         <div className="productos">
 
-          {productosFiltrados.map(producto => (
+          {productosOrdenados.map(producto => (
+
             <ProductoCard
               key={producto.id}
               producto={producto}
               onEliminar={eliminarProducto}
+              onEditar={editarProducto}
               modificarStock={modificarStock}
             />
+
           ))}
 
-          {productosFiltrados.length === 0 && (
+          {productosOrdenados.length === 0 && (
+
             <p className="sin-productos">
               No se encontraron productos.
             </p>
+
           )}
 
         </div>
@@ -257,12 +408,15 @@ function App() {
         <div className="productos">
 
           {disponibles.map(producto => (
+
             <ProductoCard
               key={producto.id}
               producto={producto}
               onEliminar={eliminarProducto}
+              onEditar={editarProducto}
               modificarStock={modificarStock}
             />
+
           ))}
 
         </div>

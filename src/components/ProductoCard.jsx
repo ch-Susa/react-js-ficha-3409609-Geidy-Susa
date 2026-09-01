@@ -1,6 +1,7 @@
 function ProductoCard({
   producto,
   onEliminar,
+  onEditar,
   modificarStock
 }) {
 
@@ -66,22 +67,45 @@ function ProductoCard({
 
       </div>
 
-      {producto.stock > 0 ? (
-        <span className="disponible">
-          ✓ Disponible
-        </span>
-      ) : (
+      {producto.stock === 0 ? (
+
         <span className="agotado">
           ✕ Agotado
         </span>
+
+      ) : producto.stock <= 2 ? (
+
+        <span className="stock-bajo">
+          ⚠ Stock bajo
+        </span>
+
+      ) : (
+
+        <span className="disponible">
+          ✓ Disponible
+        </span>
+
       )}
 
       <button
         className="btn-eliminar"
-        onClick={() => onEliminar(producto.id)}
+        onClick={() =>
+          onEliminar(producto.id)
+        }
       >
-        🗑 Eliminar producto
+        Eliminar producto
       </button>
+
+      <br />
+
+      <button
+        onClick={() =>
+          onEditar(producto)
+        }
+      >
+        Editar
+      </button>
+
     </article>
   );
 }
