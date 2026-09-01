@@ -1,16 +1,32 @@
 import ProductoCard from './components/ProductoCard';
 import './App.css';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { productos as productosIniciales } from "./data/productos";
 import FormularioProducto from "./components/FormularioProducto";
 
 function App() {
-  const [productos, setProductos] =
-    useState(productosIniciales);
 
+  const obtenerProductosIniciales = () => {
+    const guardados = localStorage.getItem("inventario");
+
+    if (guardados) {
+      return JSON.parse(guardados);
+    }
+
+    return productosIniciales;
+  };
+
+  const [productos, setProductos] = useState(obtenerProductosIniciales);
   const [busqueda, setBusqueda] = useState("");
   const [soloDisponibles, setSoloDisponibles] = useState(false);
   const [categoria, setCategoria] = useState("Todas");
+
+  useEffect(() => {
+    localStorage.setItem(
+      "inventario",
+      JSON.stringify(productos)
+    );
+  }, [productos]);
 
   const agregarProducto = (nuevoProducto) => {
     setProductos([
@@ -23,6 +39,7 @@ function App() {
     const nuevaLista = productos.filter(
       producto => producto.id !== id
     );
+
     setProductos(nuevaLista);
   };
 
@@ -38,8 +55,10 @@ function App() {
           )
         };
       }
+
       return producto;
     });
+
     setProductos(nuevosProductos);
   };
 
@@ -63,8 +82,8 @@ function App() {
     0
   );
 
-  const productosFiltrados =
-    productosConDescuento.filter(producto => {
+  const productosFiltrados = productosConDescuento.filter(
+    producto => {
 
       const coincideNombre =
         producto.nombre
@@ -84,7 +103,8 @@ function App() {
         coincideCategoria &&
         coincideStock
       );
-    });
+    }
+  );
 
   const limpiarFiltros = () => {
     setBusqueda("");
@@ -94,8 +114,11 @@ function App() {
 
   return (
     <main className="contenedor">
+
       <h1>Tienda tecnológica</h1>
+
       <section className="panel-control">
+
         <div className="buscador">
           <label>Buscar producto</label>
 
@@ -105,17 +128,22 @@ function App() {
             value={busqueda}
             onChange={(evento) => {
               setBusqueda(evento.target.value);
-            }}/>
+            }}
+          />
         </div>
 
         <FormularioProducto
-          onAgregar={agregarProducto}/>
+          onAgregar={agregarProducto}
+        />
+
         <div className="filtros">
+
           <select
             value={categoria}
             onChange={(evento) =>
               setCategoria(evento.target.value)
-            }>
+            }
+          >
             <option value="Todas">Todas</option>
             <option value="Accesorios">Accesorios</option>
             <option value="Almacenamiento">Almacenamiento</option>
@@ -128,13 +156,23 @@ function App() {
               Fabricación aditiva
             </option>
           </select>
-          <button className="btn-limpiar" onClick={limpiarFiltros}>Limpiar filtros</button>
+
+          <button
+            className="btn-limpiar"
+            onClick={limpiarFiltros}
+          >
+            Limpiar filtros
+          </button>
+
         </div>
+
       </section>
 
       <section className="estadisticas">
+
         <div className="estadistica">
           <span className="estadistica-icono"></span>
+
           <div>
             <span>Productos registrados</span>
             <strong>{productos.length}</strong>
@@ -143,6 +181,7 @@ function App() {
 
         <div className="estadistica">
           <span className="estadistica-icono"></span>
+
           <div>
             <span>Productos agotados</span>
             <strong>{productosAgotados.length}</strong>
@@ -151,8 +190,10 @@ function App() {
 
         <div className="estadistica">
           <span className="estadistica-icono"></span>
+
           <div>
             <span>Valor del inventario</span>
+
             <strong>
               ${valorInventario.toLocaleString("es-CO")}
             </strong>
@@ -161,53 +202,75 @@ function App() {
 
         <div className="estadistica">
           <span className="estadistica-icono"></span>
+
           <div>
             <span>Productos encontrados</span>
             <strong>{productosFiltrados.length}</strong>
           </div>
         </div>
+
       </section>
 
       <label className="checkbox-disponibles">
+
         <input
           type="checkbox"
           checked={soloDisponibles}
           onChange={(evento) =>
             setSoloDisponibles(evento.target.checked)
-          }/>
+          }
+        />
+
         Mostrar únicamente disponibles
+
       </label>
 
       <section className="seccion-productos">
+
         <h2>Productos</h2>
+
         <div className="productos">
+
           {productosFiltrados.map(producto => (
             <ProductoCard
               key={producto.id}
               producto={producto}
               onEliminar={eliminarProducto}
-              modificarStock={modificarStock}/>
+              modificarStock={modificarStock}
+            />
           ))}
 
           {productosFiltrados.length === 0 && (
-            <p className="sin-productos">No se encontraron productos.</p>
+            <p className="sin-productos">
+              No se encontraron productos.
+            </p>
           )}
+
         </div>
+
       </section>
 
       <section className="seccion-productos">
+
         <h2>Productos disponibles</h2>
+
         <div className="productos">
+
           {disponibles.map(producto => (
             <ProductoCard
               key={producto.id}
               producto={producto}
               onEliminar={eliminarProducto}
-              modificarStock={modificarStock}/>
+              modificarStock={modificarStock}
+            />
           ))}
+
         </div>
+
       </section>
+
     </main>
   );
 }
+
 export default App;
