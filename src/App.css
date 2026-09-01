@@ -538,3 +538,26 @@
     width: 100%;
   }
 }
+
+.btn-editar {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 1px solid #d8b4fe;
+  border-radius: 12px;
+  background: #f5f3ff;
+  color: #7c3aed;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.btn-editar:hover {
+  background: #ede9fe;
+  border-color: #a855f7;
+  transform: translateY(-2px);
+}
+
+.btn-editar:active {
+  transform: scale(0.96);
+}

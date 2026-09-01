@@ -98,7 +98,10 @@ function ProductoCard({
 
       <br />
 
-      <button onClick={() => onEditar(producto)}>
+      <button
+  className="btn-editar"
+  onClick={() => onEditar(producto)}
+>
   Editar
 </button>
 
