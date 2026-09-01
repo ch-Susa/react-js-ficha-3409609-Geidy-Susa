@@ -18,19 +18,17 @@ function App() {
 
   const [productos, setProductos] = useState(obtenerProductosIniciales);
   const [busqueda, setBusqueda] = useState("");
-  const [categoria, setCategoria] = useState("Todas");
   const [estadoStock, setEstadoStock] = useState("Todos");
-  const [orden, setOrden] = useState("nombre");
+  const [categoria, setCategoria] = useState("Todas");
   const [productoEditando, setProductoEditando] = useState(null);
+  const [orden, setOrden] = useState("nombre");
   const [mensaje, setMensaje] = useState("");
-
-  useEffect(() => {
-    localStorage.setItem(
-      "inventario",
-      JSON.stringify(productos)
-    );
-  }, [productos]);
-
+useEffect(() => {
+  localStorage.setItem(
+    "inventario",
+    JSON.stringify(productos)
+  );
+}, [productos]);
   const agregarProducto = (nuevoProducto) => {
     setProductos(prevProductos => [
       ...prevProductos,
@@ -42,7 +40,7 @@ function App() {
 
   const eliminarProducto = (id) => {
     const confirmar = window.confirm(
-      "¿Estás segura de que quieres eliminar este producto?"
+      "¿Estás seguro de que quieres eliminar este producto?"
     );
 
     if (!confirmar) {
@@ -57,12 +55,8 @@ function App() {
   };
 
   const editarProducto = (producto) => {
-    const productoOriginal = productos.find(
-      item => item.id === producto.id
-    );
-
-    setProductoEditando(productoOriginal);
-  };
+  setProductoEditando(producto);
+};
 
   const actualizarProducto = (productoActualizado) => {
     setProductos(prevProductos =>
@@ -103,7 +97,6 @@ function App() {
     setCategoria("Todas");
     setEstadoStock("Todos");
     setOrden("nombre");
-
     setMensaje("Filtros limpiados.");
   };
 
@@ -175,7 +168,6 @@ function App() {
       total + producto.precio * producto.stock,
     0
   );
-
   return (
     <main className="contenedor">
 
@@ -210,7 +202,7 @@ function App() {
           onActualizar={actualizarProducto}
           onMensaje={setMensaje}
         />
-
+      
         <div className="filtros">
 
           <select
@@ -219,7 +211,6 @@ function App() {
               setCategoria(evento.target.value)
             }
           >
-
             <option value="Todas">
               Todas las categorías
             </option>
@@ -255,7 +246,6 @@ function App() {
             <option value="Fabricación aditiva">
               Fabricación aditiva
             </option>
-
           </select>
 
           <select
@@ -264,7 +254,6 @@ function App() {
               setEstadoStock(evento.target.value)
             }
           >
-
             <option value="Todos">
               Todos
             </option>
@@ -276,7 +265,6 @@ function App() {
             <option value="Agotados">
               Agotados
             </option>
-
           </select>
 
           <select
@@ -285,7 +273,6 @@ function App() {
               setOrden(evento.target.value)
             }
           >
-
             <option value="nombre">
               Nombre A-Z
             </option>
@@ -305,7 +292,6 @@ function App() {
             <option value="stockMayor">
               Stock mayor a menor
             </option>
-
           </select>
 
           <button
@@ -322,29 +308,24 @@ function App() {
       <section className="estadisticas">
 
         <div className="estadistica">
-
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos registrados</span>
             <strong>{productos.length}</strong>
           </div>
-
         </div>
 
         <div className="estadistica">
-
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos agotados</span>
             <strong>{productosAgotados.length}</strong>
           </div>
-
         </div>
 
         <div className="estadistica">
-
           <span className="estadistica-icono"></span>
 
           <div>
@@ -353,20 +334,16 @@ function App() {
             <strong>
               ${valorInventario.toLocaleString("es-CO")}
             </strong>
-
           </div>
-
         </div>
 
         <div className="estadistica">
-
           <span className="estadistica-icono"></span>
 
           <div>
             <span>Productos encontrados</span>
             <strong>{productosOrdenados.length}</strong>
           </div>
-
         </div>
 
       </section>
@@ -378,7 +355,6 @@ function App() {
         <div className="productos">
 
           {productosOrdenados.map(producto => (
-
             <ProductoCard
               key={producto.id}
               producto={producto}
@@ -386,15 +362,12 @@ function App() {
               onEditar={editarProducto}
               modificarStock={modificarStock}
             />
-
           ))}
 
           {productosOrdenados.length === 0 && (
-
             <p className="sin-productos">
               No se encontraron productos.
             </p>
-
           )}
 
         </div>
@@ -408,7 +381,6 @@ function App() {
         <div className="productos">
 
           {disponibles.map(producto => (
-
             <ProductoCard
               key={producto.id}
               producto={producto}
@@ -416,7 +388,6 @@ function App() {
               onEditar={editarProducto}
               modificarStock={modificarStock}
             />
-
           ))}
 
         </div>

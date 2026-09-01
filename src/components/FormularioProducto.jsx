@@ -15,31 +15,24 @@ function FormularioProducto({
   });
 
   const manejarCambio = (evento) => {
-
     setFormulario({
       ...formulario,
       [evento.target.name]: evento.target.value
     });
-
   };
 
   useEffect(() => {
-
-    if (productoEditando) {
-
-      setFormulario({
-        nombre: productoEditando.nombre,
-        categoria: productoEditando.categoria,
-        precio: productoEditando.precio,
-        stock: productoEditando.stock
-      });
-
-    }
-
-  }, [productoEditando]);
+  if (productoEditando) {
+    setFormulario({
+      nombre: productoEditando.nombre,
+      categoria: productoEditando.categoria,
+      precio: productoEditando.precio,
+      stock: productoEditando.stock
+    });
+  }
+}, [productoEditando]);
 
   const manejarEnvio = (evento) => {
-
     evento.preventDefault();
 
     if (
@@ -48,9 +41,7 @@ function FormularioProducto({
       Number(formulario.precio) <= 0 ||
       Number(formulario.stock) < 0
     ) {
-
       onMensaje("Revisa los datos del producto.");
-
       return;
     }
 
@@ -77,7 +68,6 @@ function FormularioProducto({
       };
 
       onAgregar(nuevoProducto);
-
     }
 
     setFormulario({
@@ -86,63 +76,60 @@ function FormularioProducto({
       precio: "",
       stock: ""
     });
-
   };
 
-  return (
-    <form
-      className="formulario-producto"
-      onSubmit={manejarEnvio}
-    >
 
-      <h2>
-        {productoEditando
-          ? "Editar producto"
-          : "Agregar producto"}
-      </h2>
+return (
+  <form
+    className="formulario-producto"
+    onSubmit={manejarEnvio}
+  >
 
-      <input
-        type="text"
-        name="nombre"
-        placeholder="Nombre"
-        value={formulario.nombre}
-        onChange={manejarCambio}
-      />
+    <h2>
+      {productoEditando
+        ? "Editar producto"
+        : "Agregar producto"}
+    </h2>
 
-      <input
-        type="text"
-        name="categoria"
-        placeholder="Categoría"
-        value={formulario.categoria}
-        onChange={manejarCambio}
-      />
+    <input
+      type="text"
+      name="nombre"
+      placeholder="Nombre"
+      value={formulario.nombre}
+      onChange={manejarCambio}
+    />
 
-      <input
-        type="number"
-        name="precio"
-        placeholder="Precio"
-        value={formulario.precio}
-        onChange={manejarCambio}
-      />
+    <input
+      type="text"
+      name="categoria"
+      placeholder="Categoría"
+      value={formulario.categoria}
+      onChange={manejarCambio}
+    />
 
-      <input
-        type="number"
-        name="stock"
-        placeholder="Stock"
-        value={formulario.stock}
-        onChange={manejarCambio}
-      />
+    <input
+      type="number"
+      name="precio"
+      placeholder="Precio"
+      value={formulario.precio}
+      onChange={manejarCambio}
+    />
 
-      <button type="submit">
+    <input
+      type="number"
+      name="stock"
+      placeholder="Stock"
+      value={formulario.stock}
+      onChange={manejarCambio}
+    />
 
-        {productoEditando
-          ? "Guardar cambios"
-          : "Agregar producto"}
+    <button type="submit">
+      {productoEditando
+        ? "Guardar cambios"
+        : "Agregar producto"}
+    </button>
 
-      </button>
-
-    </form>
-  );
-}
+  </form>
+);}
 
 export default FormularioProducto;

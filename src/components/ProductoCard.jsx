@@ -98,13 +98,9 @@ function ProductoCard({
 
       <br />
 
-      <button
-        onClick={() =>
-          onEditar(producto)
-        }
-      >
-        Editar
-      </button>
+      <button onClick={() => onEditar(producto)}>
+  Editar
+</button>
 
     </article>
   );
